@@ -19,13 +19,6 @@
 		juego.iniciar();
 	});
 
-	const pista = $derived.by(() => {
-		const ronda = juego.ronda;
-		if (!ronda || ronda.estado !== 'jugando' || ronda.intentos.length === 0) return null;
-		const ultimo = ronda.intentos[ronda.intentos.length - 1];
-		return { anio: ultimo, cerca: Math.abs(ultimo - ronda.juego.anio) === 1 };
-	});
-
 	const esUltima = $derived(!!juego.sesion && juego.sesion.actual === juego.sesion.rondas.length - 1);
 	const cambioPendiente = $derived(
 		!!juego.sesion && !juego.terminada && juego.sesion.hardcore !== juego.hardcore
@@ -63,14 +56,16 @@
 				<div class="estado" aria-live="polite">
 					{#if ronda.estado === 'jugando'}
 						<p class="intento">Intento {ronda.intentos.length + 1} de {juego.intentosMax}</p>
-						{#if pista}
-							<p class="pista">No es {pista.anio}, {pista.cerca ? '¡estás cerca!' : 'estás lejos.'}</p>
+						{#if juego.costoProximaPista !== null}
+							<button class="btn-pista" onclick={() => juego.pedirPista()}>
+								Pedir pista <span>−{juego.costoProximaPista} pts</span>
+							</button>
 						{/if}
-						{#if juego.ayuda}
-							{#key juego.ayuda.titulo}
+						{#if juego.pistaActual}
+							{#key juego.pistaActual.texto}
 								<p class="ayuda" in:fade={{ duration: 250 }}>
-									<span class="ayuda-titulo">{juego.ayuda.titulo}</span>
-									{juego.ayuda.texto}
+									<span class="ayuda-titulo">{juego.pistaActual.titulo}</span>
+									{juego.pistaActual.texto}
 								</p>
 							{/key}
 						{/if}

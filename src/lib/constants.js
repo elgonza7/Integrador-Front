@@ -7,4 +7,6 @@ export const INTENTOS_HARDCORE = 1;
 // puntos segun en que intento acertas (1ro, 2do, 3ro)
 export const PUNTOS_POR_INTENTO = [100, 60, 30];
 export const MULTIPLICADOR_HARDCORE = 2;
+// lo que cuesta cada pista (1ra, 2da, 3ra)
+export const COSTOS_PISTA = [5, 10, 20];
 export const CACHE_TTL_MS = 24 * 60 * 60 * 1000;

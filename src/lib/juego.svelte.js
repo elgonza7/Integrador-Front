@@ -10,13 +10,14 @@ import {
 	INTENTOS_NORMAL,
 	INTENTOS_HARDCORE,
 	PUNTOS_POR_INTENTO,
-	MULTIPLICADOR_HARDCORE
+	MULTIPLICADOR_HARDCORE,
+	COSTOS_PISTA
 } from './constants.js';
 
 /** @typedef {import('./api.js').Juego} Juego */
 /** @typedef {import('./api.js').Origen} Origen */
 /** @typedef {'jugando' | 'acertado' | 'fallado'} EstadoRonda */
-/** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number }} Ronda */
+/** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number, pistasUsadas?: number }} Ronda */
 /** @typedef {{ hardcore: boolean, rondas: Ronda[], actual: number, guardada: boolean }} Sesion */
 /** @typedef {'nada' | 'guardando' | 'error'} EstadoGuardado */
 
@@ -51,11 +52,11 @@ function esSesionValida(valor) {
 	return !!s && Array.isArray(s.rondas) && s.rondas.length > 0 && typeof s.actual === 'number';
 }
 
-// una ayuda por intento, cada vez mas facil
+// las pistas salen en este orden, cada vez mas faciles
 /** @type {{ clave: 'capciosa' | 'medio' | 'regalada', titulo: string }[]} */
-const NIVELES_AYUDA = [
-	{ clave: 'capciosa', titulo: 'Pista capciosa' },
-	{ clave: 'medio', titulo: 'Pista media' },
+const NIVELES_PISTA = [
+	{ clave: 'capciosa', titulo: 'Pista' },
+	{ clave: 'medio', titulo: 'Pista' },
 	{ clave: 'regalada', titulo: 'Última esperanza' }
 ];
 
@@ -83,6 +84,26 @@ class EstadoJuego {
 	terminada = $derived(!!this.sesion && this.sesion.actual >= this.sesion.rondas.length);
 	intentosMax = $derived(this.sesion?.hardcore ? INTENTOS_HARDCORE : INTENTOS_NORMAL);
 	puntosTotales = $derived(this.sesion?.rondas.reduce((total, r) => total + r.puntos, 0) ?? 0);
+
+	// en hardcore no hay pistas
+	hayPistas = $derived(
+		!!this.sesion && !this.sesion.hardcore && this.ronda?.estado === 'jugando' && !!pistas[this.ronda.juego.anio]
+	);
+
+	// se muestra solo la ultima que compro, que es la mas facil
+	pistaActual = $derived.by(() => {
+		const ronda = this.ronda;
+		const usadas = ronda?.pistasUsadas ?? 0;
+		if (!this.hayPistas || !ronda || usadas === 0) return null;
+		const nivel = NIVELES_PISTA[usadas - 1];
+		return { titulo: nivel.titulo, texto: pistas[ronda.juego.anio][nivel.clave] };
+	});
+
+	// lo que cuesta la proxima pista, o null si ya no quedan
+	costoProximaPista = $derived.by(() => {
+		if (!this.hayPistas || !this.ronda) return null;
+		return COSTOS_PISTA[this.ronda.pistasUsadas ?? 0] ?? null;
+	});
 
 	async iniciar() {
 		this.hardcore = leer('hardcore', false);
@@ -117,11 +138,21 @@ class EstadoJuego {
 		ronda.intentos.push(anio);
 		if (anio === ronda.juego.anio) {
 			const base = PUNTOS_POR_INTENTO[ronda.intentos.length - 1];
-			ronda.puntos = base * (sesion.hardcore ? MULTIPLICADOR_HARDCORE : 1);
+			// += porque ya pueden estar restadas las pistas que pidio
+			ronda.puntos += base * (sesion.hardcore ? MULTIPLICADOR_HARDCORE : 1);
 			ronda.estado = 'acertado';
 		} else if (ronda.intentos.length >= this.intentosMax) {
 			ronda.estado = 'fallado';
 		}
+		this.#persistir();
+	}
+
+	pedirPista() {
+		const ronda = this.ronda;
+		const costo = this.costoProximaPista;
+		if (!ronda || costo === null) return;
+		ronda.pistasUsadas = (ronda.pistasUsadas ?? 0) + 1;
+		ronda.puntos -= costo;
 		this.#persistir();
 	}
 
@@ -139,7 +170,8 @@ class EstadoJuego {
 
 		this.estadoGuardado = 'guardando';
 		try {
-			this.mejorPuntaje = await guardarPuntaje(limpio, this.puntosTotales, sesion.hardcore);
+			// si gasto mas en pistas de lo que gano queda negativo, al ranking va 0
+			this.mejorPuntaje = await guardarPuntaje(limpio, Math.max(0, this.puntosTotales), sesion.hardcore);
 			sesion.guardada = true;
 			this.estadoGuardado = 'nada';
 			guardar('ultimoNombre', limpio);
@@ -185,7 +217,8 @@ class EstadoJuego {
 				linea: generarLinea(juego.anio),
 				intentos: [],
 				estado: /** @type {EstadoRonda} */ ('jugando'),
-				puntos: 0
+				puntos: 0,
+				pistasUsadas: 0
 			}))
 		};
 	}

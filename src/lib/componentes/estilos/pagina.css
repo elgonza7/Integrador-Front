@@ -39,9 +39,23 @@
 	font-weight: 500;
 }
 
-.tablero .pista {
-	margin: 0;
+.tablero .btn-pista {
+	border: 1.5px dashed var(--naranja);
+	background: transparent;
+	color: var(--naranja);
+	border-radius: 999px;
+	padding: 0.4rem 1rem;
+	font-size: 0.85rem;
 	font-weight: 600;
+	transition: background 0.15s;
+}
+
+.tablero .btn-pista:hover {
+	background: var(--naranja-claro);
+}
+
+.tablero .btn-pista span {
+	margin-left: 0.3rem;
 	color: var(--rojo);
 }
 

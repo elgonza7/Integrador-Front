@@ -41,8 +41,8 @@
 				{/if}
 				<span class="nombre">{ronda.juego.nombre}</span>
 				<span class="anio">{ronda.juego.anio}</span>
-				<span class="pts" class:fallado={ronda.estado === 'fallado'}>
-					{ronda.estado === 'acertado' ? `+${ronda.puntos}` : '0'}
+				<span class="pts" class:fallado={ronda.puntos <= 0}>
+					{ronda.puntos > 0 ? `+${ronda.puntos}` : ronda.puntos}
 				</span>
 			</li>
 		{/each}

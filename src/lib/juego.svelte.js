@@ -17,7 +17,7 @@ import {
 /** @typedef {import('./api.js').Juego} Juego */
 /** @typedef {import('./api.js').Origen} Origen */
 /** @typedef {'jugando' | 'acertado' | 'fallado'} EstadoRonda */
-/** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number, pistasUsadas?: number }} Ronda */
+/** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number, pistasCompradas?: number[] }} Ronda */
 /** @typedef {{ hardcore: boolean, rondas: Ronda[], actual: number, guardada: boolean }} Sesion */
 /** @typedef {'nada' | 'guardando' | 'error'} EstadoGuardado */
 
@@ -90,19 +90,29 @@ class EstadoJuego {
 		!!this.sesion && !this.sesion.hardcore && this.ronda?.estado === 'jugando' && !!pistas[this.ronda.juego.anio]
 	);
 
-	// se muestra solo la ultima que compro, que es la mas facil
+	// cada intento tiene su pista: intento 1 la capciosa, intento 2 la media, intento 3 la regalada
+	nivelPista = $derived(this.ronda?.intentos.length ?? 0);
+
+	// se muestra la ultima que compro, que es la mas facil
 	pistaActual = $derived.by(() => {
 		const ronda = this.ronda;
-		const usadas = ronda?.pistasUsadas ?? 0;
-		if (!this.hayPistas || !ronda || usadas === 0) return null;
-		const nivel = NIVELES_PISTA[usadas - 1];
+		const compradas = ronda?.pistasCompradas ?? [];
+		if (!this.hayPistas || !ronda || compradas.length === 0) return null;
+		const nivel = NIVELES_PISTA[Math.max(...compradas)];
 		return { titulo: nivel.titulo, texto: pistas[ronda.juego.anio][nivel.clave] };
 	});
 
-	// lo que cuesta la proxima pista, o null si ya no quedan
+	// lo que cuesta la pista de este intento, o null si ya la compro
 	costoProximaPista = $derived.by(() => {
 		if (!this.hayPistas || !this.ronda) return null;
-		return COSTOS_PISTA[this.ronda.pistasUsadas ?? 0] ?? null;
+		if ((this.ronda.pistasCompradas ?? []).includes(this.nivelPista)) return null;
+		return COSTOS_PISTA[this.nivelPista] ?? null;
+	});
+
+	ultimoError = $derived.by(() => {
+		const ronda = this.ronda;
+		if (!ronda || ronda.estado !== 'jugando' || ronda.intentos.length === 0) return null;
+		return ronda.intentos[ronda.intentos.length - 1];
 	});
 
 	async iniciar() {
@@ -151,7 +161,7 @@ class EstadoJuego {
 		const ronda = this.ronda;
 		const costo = this.costoProximaPista;
 		if (!ronda || costo === null) return;
-		ronda.pistasUsadas = (ronda.pistasUsadas ?? 0) + 1;
+		ronda.pistasCompradas = [...(ronda.pistasCompradas ?? []), this.nivelPista];
 		ronda.puntos -= costo;
 		this.#persistir();
 	}
@@ -218,7 +228,7 @@ class EstadoJuego {
 				intentos: [],
 				estado: /** @type {EstadoRonda} */ ('jugando'),
 				puntos: 0,
-				pistasUsadas: 0
+				pistasCompradas: []
 			}))
 		};
 	}

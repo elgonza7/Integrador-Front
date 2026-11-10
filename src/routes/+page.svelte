@@ -69,6 +69,11 @@
 								</p>
 							{/key}
 						{/if}
+						{#if juego.ultimoError !== null}
+							{#key juego.ultimoError}
+								<p class="incorrecto">✗ Incorrecto, no es {juego.ultimoError}</p>
+							{/key}
+						{/if}
 					{:else}
 						<p class="veredicto" class:ok={ronda.estado === 'acertado'}>
 							{ronda.estado === 'acertado' ? `¡Correcto! +${ronda.puntos} pts` : `Era ${ronda.juego.anio}`}

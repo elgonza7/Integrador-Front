@@ -80,6 +80,28 @@
 	color: var(--naranja);
 }
 
+.tablero .incorrecto {
+	margin: 0;
+	padding: 0.35rem 0.9rem;
+	border-radius: 999px;
+	background: #fdecec;
+	color: var(--rojo);
+	font-size: 0.9rem;
+	font-weight: 700;
+	animation: sacudir 0.35s ease;
+}
+
+@keyframes sacudir {
+	20%,
+	60% {
+		transform: translateX(-5px);
+	}
+	40%,
+	80% {
+		transform: translateX(5px);
+	}
+}
+
 .tablero .veredicto {
 	margin: 0;
 	font-size: 1.15rem;

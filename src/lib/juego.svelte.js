@@ -84,15 +84,6 @@ class EstadoJuego {
 	intentosMax = $derived(this.sesion?.hardcore ? INTENTOS_HARDCORE : INTENTOS_NORMAL);
 	puntosTotales = $derived(this.sesion?.rondas.reduce((total, r) => total + r.puntos, 0) ?? 0);
 
-	ayuda = $derived.by(() => {
-		const ronda = this.ronda;
-		if (!ronda || ronda.estado !== 'jugando') return null;
-		const delAnio = pistas[ronda.juego.anio];
-		const nivel = NIVELES_AYUDA[ronda.intentos.length];
-		if (!delAnio || !nivel) return null;
-		return { titulo: nivel.titulo, texto: delAnio[nivel.clave] };
-	});
-
 	async iniciar() {
 		this.hardcore = leer('hardcore', false);
 

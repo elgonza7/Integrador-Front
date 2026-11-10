@@ -126,9 +126,9 @@ export const pistas = {
         regalada: "En este año Apple lanzó al mercado sus gafas de realidad mixta, las Vision Pro."
     },
     2025: {
-        capciosa: "Regresaremos por fin al soleado estado de Leonida para hacer locuras con Lucía y Jason en el mundo abierto más caro jamás creado.",
-        medio: "Es el año de estreno programado para el sucesor del gigantesco GTA V, esperando romper todos los récords de la industria.",
-        regalada: "En este año estuvo programado el esperado lanzamiento del videojuego Grand Theft Auto VI (GTA 6)."
+        capciosa: "Se destacó el auge de la inteligencia artificial con el chatbot chino DeepSeek y los progresos en la exploración espacial",
+        medio: "En ese año una canción completamente generada por IA se volvió tan masiva en las redes que obligó a las plataformas de streaming a redefinir sus políticas de derechos de autor de urgencia",
+        regalada: "En este año estuvo programado el esperado lanzamiento del videojuego Grand Theft Auto VI (GTA 6) pero no salió"
     },
     2026: {
         capciosa: "Se cumple exactamente un siglo desde que John Logie Baird logró mostrar la primera imagen difusa en una pantalla de tubo.",

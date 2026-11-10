@@ -1,17 +1,40 @@
 <script>
 	import './estilos/leaderboard.css';
-	import { TOP_RANKING } from '#lib/constants.js';
+	import { obtenerRanking } from '#lib/ranking.js';
+	import { leer } from '#lib/storage.js';
 
-	/** @type {{ ranking: import('#lib/juego.svelte.js').EntradaRanking[], hardcoreInicial: boolean }} */
-	let { ranking, hardcoreInicial } = $props();
+	/** @type {{ hardcoreInicial: boolean }} */
+	let { hardcoreInicial } = $props();
 
 	let verHardcore = $state(false);
 	$effect.pre(() => {
 		verHardcore = hardcoreInicial;
 	});
 
-	const filas = $derived(ranking.filter((e) => e.hardcore === verHardcore).slice(0, TOP_RANKING));
-	const formatoFecha = new Intl.DateTimeFormat('es-AR', { day: '2-digit', month: '2-digit' });
+	/** @type {Awaited<ReturnType<typeof obtenerRanking>> | null} */
+	let datos = $state(null);
+	let error = $state(false);
+	const miNombre = leer('ultimoNombre', '');
+
+	$effect(() => {
+		const modo = verHardcore;
+		let vigente = true;
+		datos = null;
+		error = false;
+		obtenerRanking(modo, miNombre)
+			.then((r) => vigente && (datos = r))
+			.catch((e) => {
+				console.error('No se pudo leer el ranking:', e);
+				if (vigente) error = true;
+			});
+		// si cambio de pestaña antes de que llegue la respuesta, ignoro la vieja
+		return () => (vigente = false);
+	});
+
+	const yoEnTop = $derived.by(() => {
+		const d = datos;
+		return !!d?.yo && d.top.some((f) => f.id === d.yo?.id);
+	});
 </script>
 
 <div class="leaderboard">
@@ -24,18 +47,30 @@
 		</button>
 	</div>
 
-	{#if filas.length === 0}
+	{#if error}
+		<p class="vacio">No se pudo cargar el ranking. Probá de nuevo en un rato.</p>
+	{:else if !datos}
+		<p class="vacio">Cargando ranking…</p>
+	{:else if datos.top.length === 0}
 		<p class="vacio">Todavía no hay puntajes en este modo. ¡Sé el primero!</p>
 	{:else}
 		<ol class="tabla lista-filas">
-			{#each filas as fila, i (fila.fecha)}
-				<li class:podio={i === 0}>
+			{#each datos.top as fila, i (fila.id)}
+				<li class:podio={i === 0} class:yo={fila.id === datos.yo?.id}>
 					<span class="pos">{i + 1}</span>
 					<span class="nombre">{fila.nombre}</span>
-					<span class="detalle">{fila.aciertos}/4 · {formatoFecha.format(new Date(fila.fecha))}</span>
 					<span class="pts">{fila.puntos}</span>
 				</li>
 			{/each}
+
+			{#if datos.yo && !yoEnTop}
+				<li class="separador" aria-hidden="true">···</li>
+				<li class="yo">
+					<span class="pos">{datos.yo.posicion}</span>
+					<span class="nombre">{datos.yo.nombre}</span>
+					<span class="pts">{datos.yo.puntos}</span>
+				</li>
+			{/if}
 		</ol>
 	{/if}
 </div>

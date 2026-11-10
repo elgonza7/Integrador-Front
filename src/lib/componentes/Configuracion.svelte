@@ -12,7 +12,7 @@
 	let { hardcore, cambioPendiente, onCambiar, onNuevaPartida, onBorrar } = $props();
 
 	function confirmarBorrado() {
-		if (confirm('Se borran el ranking, la partida actual y la configuración. ¿Seguro?')) onBorrar();
+		if (confirm('Se borran la partida actual y la configuración de este navegador. El ranking online no se toca. ¿Seguro?')) onBorrar();
 	}
 </script>
 

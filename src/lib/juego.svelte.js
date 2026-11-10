@@ -1,5 +1,7 @@
 import { leer, guardar, borrarTodo } from './storage.js';
 import { obtenerJuegos } from './api.js';
+import { guardarPuntaje } from './ranking.js';
+import { pistas } from './ayudas.js';
 import {
 	ANIO_MIN,
 	ANIO_MAX,
@@ -16,7 +18,7 @@ import {
 /** @typedef {'jugando' | 'acertado' | 'fallado'} EstadoRonda */
 /** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number }} Ronda */
 /** @typedef {{ hardcore: boolean, rondas: Ronda[], actual: number, guardada: boolean }} Sesion */
-/** @typedef {{ nombre: string, puntos: number, aciertos: number, hardcore: boolean, fecha: string }} EntradaRanking */
+/** @typedef {'nada' | 'guardando' | 'error'} EstadoGuardado */
 
 // mezcla la lista (fisher-yates)
 /**
@@ -49,6 +51,14 @@ function esSesionValida(valor) {
 	return !!s && Array.isArray(s.rondas) && s.rondas.length > 0 && typeof s.actual === 'number';
 }
 
+// una ayuda por intento, cada vez mas facil
+/** @type {{ clave: 'capciosa' | 'medio' | 'regalada', titulo: string }[]} */
+const NIVELES_AYUDA = [
+	{ clave: 'capciosa', titulo: 'Pista capciosa' },
+	{ clave: 'medio', titulo: 'Pista media' },
+	{ clave: 'regalada', titulo: 'Última esperanza' }
+];
+
 /** @param {Sesion} sesion */
 function usaRespaldo(sesion) {
 	return sesion.rondas.some((r) => !r.juego.imagen);
@@ -58,8 +68,10 @@ class EstadoJuego {
 	/** @type {Sesion | null} */
 	sesion = $state(null);
 	hardcore = $state(false);
-	/** @type {EntradaRanking[]} */
-	ranking = $state([]);
+	/** @type {EstadoGuardado} */
+	estadoGuardado = $state('nada');
+	/** @type {number | null} */
+	mejorPuntaje = $state(null);
 	cargando = $state(true);
 	/** @type {Origen | null} */
 	origen = $state(null);
@@ -72,9 +84,17 @@ class EstadoJuego {
 	intentosMax = $derived(this.sesion?.hardcore ? INTENTOS_HARDCORE : INTENTOS_NORMAL);
 	puntosTotales = $derived(this.sesion?.rondas.reduce((total, r) => total + r.puntos, 0) ?? 0);
 
+	ayuda = $derived.by(() => {
+		const ronda = this.ronda;
+		if (!ronda || ronda.estado !== 'jugando') return null;
+		const delAnio = pistas[ronda.juego.anio];
+		const nivel = NIVELES_AYUDA[ronda.intentos.length];
+		if (!delAnio || !nivel) return null;
+		return { titulo: nivel.titulo, texto: delAnio[nivel.clave] };
+	});
+
 	async iniciar() {
 		this.hardcore = leer('hardcore', false);
-		this.ranking = leer('ranking', []);
 
 		const { juegos, origen } = await obtenerJuegos();
 		this.#pool = juegos;
@@ -91,6 +111,8 @@ class EstadoJuego {
 
 	nuevaPartida() {
 		this.sesion = this.#crearSesion();
+		this.estadoGuardado = 'nada';
+		this.mejorPuntaje = null;
 		this.#persistir();
 	}
 
@@ -119,24 +141,22 @@ class EstadoJuego {
 	}
 
 	/** @param {string} nombre */
-	guardarEnRanking(nombre) {
+	async guardarEnRanking(nombre) {
 		const sesion = this.sesion;
-		if (!sesion || sesion.guardada || !this.terminada) return;
+		const limpio = nombre.trim().slice(0, 20);
+		if (!sesion || sesion.guardada || !this.terminada || !limpio || this.estadoGuardado === 'guardando') return;
 
-		/** @type {EntradaRanking} */
-		const entrada = {
-			nombre: nombre.trim().slice(0, 20) || 'Anónimo',
-			puntos: this.puntosTotales,
-			aciertos: sesion.rondas.filter((r) => r.estado === 'acertado').length,
-			hardcore: sesion.hardcore,
-			fecha: new Date().toISOString()
-		};
-		this.ranking = [...this.ranking, entrada].sort((a, b) => b.puntos - a.puntos).slice(0, 50);
-		sesion.guardada = true;
-
-		guardar('ranking', $state.snapshot(this.ranking));
-		guardar('ultimoNombre', entrada.nombre);
-		this.#persistir();
+		this.estadoGuardado = 'guardando';
+		try {
+			this.mejorPuntaje = await guardarPuntaje(limpio, this.puntosTotales, sesion.hardcore);
+			sesion.guardada = true;
+			this.estadoGuardado = 'nada';
+			guardar('ultimoNombre', limpio);
+			this.#persistir();
+		} catch (error) {
+			console.error('No se pudo guardar en Firebase:', error);
+			this.estadoGuardado = 'error';
+		}
 	}
 
 	/** @param {boolean} valor */
@@ -147,7 +167,6 @@ class EstadoJuego {
 
 	borrarDatos() {
 		borrarTodo();
-		this.ranking = [];
 		this.hardcore = false;
 		this.nuevaPartida();
 	}

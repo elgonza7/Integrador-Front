@@ -8,4 +8,3 @@ export const INTENTOS_HARDCORE = 1;
 export const PUNTOS_POR_INTENTO = [100, 60, 30];
 export const MULTIPLICADOR_HARDCORE = 2;
 export const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
-export const TOP_RANKING = 10;

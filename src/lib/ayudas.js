@@ -1,3 +1,4 @@
+/** @type {Record<number, { capciosa: string, medio: string, regalada: string }>} */
 export const pistas = {
     2000: {
         capciosa: "Martín Palermo, volviendo de una lesión, le hace dos goles al Real Madrid en Japón en los primeros 6 minutos.",

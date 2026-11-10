@@ -31,8 +31,23 @@
 }
 
 .leaderboard .tabla li {
-	grid-template-columns: 2rem 1fr auto auto;
-	padding: 0.65rem 0.25rem;
+	grid-template-columns: 2.5rem 1fr auto;
+	padding: 0.65rem 0.5rem;
+}
+
+.leaderboard .tabla li.yo {
+	background: var(--naranja-claro);
+	border-radius: 10px;
+	border-bottom-color: transparent;
+}
+
+.leaderboard .tabla li.separador {
+	display: block;
+	text-align: center;
+	color: var(--gris);
+	letter-spacing: 0.3em;
+	padding: 0.2rem 0;
+	border-bottom: 0;
 }
 
 .leaderboard .pos {
@@ -43,11 +58,6 @@
 
 .leaderboard .podio .pos {
 	color: var(--naranja);
-}
-
-.leaderboard .detalle {
-	font-size: 0.8rem;
-	color: var(--gris);
 }
 
 .leaderboard .pts {

@@ -1,6 +1,7 @@
 <script>
 	import '#lib/componentes/estilos/pagina.css';
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { juego } from '#lib/juego.svelte.js';
 	import Header from '#lib/componentes/Header.svelte';
 	import JuegoCard from '#lib/componentes/JuegoCard.svelte';
@@ -45,6 +46,8 @@
 		<Resultados
 			sesion={juego.sesion}
 			puntos={juego.puntosTotales}
+			estadoGuardado={juego.estadoGuardado}
+			mejorPuntaje={juego.mejorPuntaje}
 			onGuardar={(nombre) => juego.guardarEnRanking(nombre)}
 			onNuevaPartida={() => juego.nuevaPartida()}
 			onVerRanking={() => (verRanking = true)}
@@ -62,6 +65,14 @@
 						<p class="intento">Intento {ronda.intentos.length + 1} de {juego.intentosMax}</p>
 						{#if pista}
 							<p class="pista">No es {pista.anio}, {pista.cerca ? '¡estás cerca!' : 'estás lejos.'}</p>
+						{/if}
+						{#if juego.ayuda}
+							{#key juego.ayuda.titulo}
+								<p class="ayuda" in:fade={{ duration: 250 }}>
+									<span class="ayuda-titulo">{juego.ayuda.titulo}</span>
+									{juego.ayuda.texto}
+								</p>
+							{/key}
 						{/if}
 					{:else}
 						<p class="veredicto" class:ok={ronda.estado === 'acertado'}>
@@ -85,7 +96,7 @@
 
 {#if verRanking}
 	<Modal titulo="Leaderboard" onCerrar={() => (verRanking = false)}>
-		<Leaderboard ranking={juego.ranking} hardcoreInicial={juego.sesion?.hardcore ?? juego.hardcore} />
+		<Leaderboard hardcoreInicial={juego.sesion?.hardcore ?? juego.hardcore} />
 	</Modal>
 {/if}
 

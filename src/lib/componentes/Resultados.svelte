@@ -7,12 +7,14 @@
 	 * @type {{
 	 *   sesion: import('#lib/juego.svelte.js').Sesion,
 	 *   puntos: number,
+	 *   estadoGuardado: import('#lib/juego.svelte.js').EstadoGuardado,
+	 *   mejorPuntaje: number | null,
 	 *   onGuardar: (nombre: string) => void,
 	 *   onNuevaPartida: () => void,
 	 *   onVerRanking: () => void
 	 * }}
 	 */
-	let { sesion, puntos, onGuardar, onNuevaPartida, onVerRanking } = $props();
+	let { sesion, puntos, estadoGuardado, mejorPuntaje, onGuardar, onNuevaPartida, onVerRanking } = $props();
 
 	let nombre = $state(leer('ultimoNombre', ''));
 	const aciertos = $derived(sesion.rondas.filter((r) => r.estado === 'acertado').length);
@@ -48,15 +50,23 @@
 
 	{#if sesion.guardada}
 		<p class="guardado">
-			Puntaje guardado. <button class="btn-link" onclick={onVerRanking}>Ver leaderboard</button>
+			{mejorPuntaje !== null && mejorPuntaje > puntos
+				? `Tu mejor puntaje sigue siendo ${mejorPuntaje}.`
+				: 'Puntaje guardado.'}
+			<button class="btn-link" onclick={onVerRanking}>Ver leaderboard</button>
 		</p>
 	{:else}
 		<form onsubmit={enviar}>
 			<label for="nombre">Tu nombre para el ranking</label>
 			<div class="fila">
 				<input id="nombre" bind:value={nombre} maxlength="20" placeholder="Ej: Gokin" required autocomplete="nickname" />
-				<button class="btn-secundario" type="submit">Guardar</button>
+				<button class="btn-secundario" type="submit" disabled={estadoGuardado === 'guardando'}>
+					{estadoGuardado === 'guardando' ? 'Guardando…' : 'Guardar'}
+				</button>
 			</div>
+			{#if estadoGuardado === 'error'}
+				<p class="error">No se pudo guardar. Revisá tu conexión y probá de nuevo.</p>
+			{/if}
 		</form>
 	{/if}
 

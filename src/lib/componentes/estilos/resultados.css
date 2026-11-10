@@ -95,6 +95,12 @@
 	border-color: var(--naranja);
 }
 
+.resultados .error {
+	margin: 0.5rem 0 0;
+	font-size: 0.85rem;
+	color: var(--rojo);
+}
+
 .resultados .guardado {
 	color: var(--gris);
 	margin: 0 0 1.25rem;

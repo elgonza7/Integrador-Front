@@ -11,7 +11,7 @@ Juego de trivia hecho con **Svelte 5 + SvelteKit**: aparece la tapa y el título
 - Tenés **3 intentos** por juego. Si fallás, el año queda tachado y te avisa si estás cerca (a 1 año) o lejos.
 - Puntos por acierto: **100** en el primer intento, **60** en el segundo y **30** en el tercero.
 - **Modo Hardcore** (desde el engranaje): un solo intento por juego y los puntos valen el doble.
-- Al terminar ingresás tu nombre y el puntaje queda en el **Leaderboard**, separado por modo.
+- Al terminar ingresás tu nombre y el puntaje se guarda en un **Leaderboard online** (Firebase), separado por modo. Se muestran los 4 primeros y, más abajo, tu posición. Cada jugador aparece una sola vez, con su mejor puntaje.
 
 ![Resultados de la partida](docs/captura-resultados.png)
 
@@ -20,7 +20,7 @@ Juego de trivia hecho con **Svelte 5 + SvelteKit**: aparece la tapa y el título
 | | De dónde salen | Dónde se guardan |
 |---|---|---|
 | Juegos, años y tapas | API de [IGDB](https://api-docs.igdb.com/) (vía un endpoint propio en el servidor) | `localStorage`, en caché por 24 h |
-| Nombre del jugador y puntaje | Formulario al terminar la partida | `localStorage` (Leaderboard) |
+| Nombre del jugador y puntaje | Formulario al terminar la partida | [Cloud Firestore](https://firebase.google.com/docs/firestore) (Leaderboard online) |
 | Partida en curso y configuración | El propio juego | `localStorage`: si recargás la página, seguís donde estabas |
 
 Si IGDB no responde o no hay credenciales, el juego sigue funcionando con una lista de juegos de respaldo (`src/lib/games.js`).
@@ -30,6 +30,7 @@ Si IGDB no responde o no hay credenciales, el juego sigue funcionando con una li
 - [Svelte 5](https://svelte.dev/) (runes) y [SvelteKit 3](https://svelte.dev/docs/kit)
 - [Vite](https://vite.dev/)
 - [IGDB API v4](https://api-docs.igdb.com/) con autenticación de Twitch
+- [Firebase / Cloud Firestore](https://firebase.google.com/docs/firestore) para el leaderboard
 - CSS propio, sin frameworks (`src/lib/componentes/estilos/`)
 
 ## Instalación
@@ -78,6 +79,7 @@ src/
     ├── api.js                  # pide los juegos al endpoint (con caché y respaldo)
     ├── juego.svelte.js         # estado y reglas del juego
     ├── storage.js              # lectura/escritura segura de localStorage
+    ├── ranking.js              # leaderboard en Firestore (guardar y leer)
     ├── constants.js            # rango de años, intentos, puntos
     ├── games.js                # juegos de respaldo
     ├── ayudas.js               # pistas por año
@@ -86,6 +88,12 @@ src/
         ├── *.svelte            # Header, JuegoCard, LineaTemporal, Semaforo, Modal...
         └── estilos/            # un .css por componente + base, botones y comunes
 ```
+
+## Leaderboard en Firestore
+
+Hay dos colecciones, `ranking_normal` y `ranking_hardcore`. Cada documento tiene solo `nombre` y `puntos`, y el id sale del nombre, así cada jugador aparece una vez. Tu posición se calcula contando cuántos tienen más puntos que vos.
+
+Las reglas de seguridad están en [`firestore.rules`](firestore.rules): cualquiera puede leer, y para escribir el nombre tiene que tener entre 1 y 20 caracteres, los puntos tienen que estar dentro del máximo del modo, y solo se puede reemplazar un puntaje por uno mejor.
 
 ## Por qué hay un endpoint en el servidor
 

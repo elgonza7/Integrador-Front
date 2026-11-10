@@ -49,6 +49,11 @@ function esSesionValida(valor) {
 	return !!s && Array.isArray(s.rondas) && s.rondas.length > 0 && typeof s.actual === 'number';
 }
 
+/** @param {Sesion} sesion */
+function usaRespaldo(sesion) {
+	return sesion.rondas.some((r) => !r.juego.imagen);
+}
+
 class EstadoJuego {
 	/** @type {Sesion | null} */
 	sesion = $state(null);
@@ -75,8 +80,11 @@ class EstadoJuego {
 		this.#pool = juegos;
 		this.origen = origen;
 
-		const guardada = leer('sesion', null);
-		this.sesion = esSesionValida(guardada) ? guardada : this.#crearSesion();
+		const guardada = /** @type {unknown} */ (leer('sesion', null));
+		const enCurso = esSesionValida(guardada) && guardada.actual < guardada.rondas.length;
+		// si la partida guardada se armo con los juegos de respaldo y ahora igdb anda, arranco una nueva con portadas
+		const descartar = enCurso && origen !== 'respaldo' && usaRespaldo(guardada);
+		this.sesion = esSesionValida(guardada) && !descartar ? guardada : this.#crearSesion();
 		this.cargando = false;
 		this.#persistir();
 	}

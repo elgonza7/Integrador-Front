@@ -1,0 +1,35 @@
+/* filas del leaderboard y de resultados */
+.lista-filas {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.lista-filas li {
+	display: grid;
+	align-items: center;
+	gap: 0.75rem;
+	border-bottom: 1px solid var(--linea);
+}
+
+.lista-filas li:last-child {
+	border-bottom: 0;
+}
+
+.nombre {
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.pts {
+	text-align: right;
+	font-weight: 800;
+	color: var(--naranja);
+	font-variant-numeric: tabular-nums;
+}
+
+.pts.fallado {
+	color: var(--rojo);
+}

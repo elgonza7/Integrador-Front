@@ -1,0 +1,1 @@
+export { pistas } from './ayudas';

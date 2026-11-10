@@ -1,0 +1,88 @@
+.linea {
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	width: 100%;
+	max-width: 920px;
+	margin: 0 auto;
+	padding-bottom: 1.5rem;
+}
+
+.linea .eje {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	border-radius: 2px;
+	background: var(--texto);
+}
+
+.linea .marca {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.55rem;
+	background: none;
+	border: 0;
+	padding: 0;
+}
+
+.linea .palito {
+	width: 3px;
+	height: 28px;
+	border-radius: 0 0 2px 2px;
+	background: var(--texto);
+	transition: height 0.15s, background 0.15s;
+}
+
+.linea .anio {
+	font-size: 1.1rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	padding: 0.4rem 0.8rem;
+	border-radius: 999px;
+	transition: background 0.15s, color 0.15s;
+}
+
+.linea .marca:not(:disabled):hover .palito,
+.linea .marca:not(:disabled):focus-visible .palito {
+	height: 38px;
+	background: var(--naranja);
+}
+
+.linea .marca:not(:disabled):hover .anio,
+.linea .marca:not(:disabled):focus-visible .anio {
+	background: var(--naranja-claro);
+	color: var(--naranja);
+}
+
+.linea .marca:focus-visible {
+	outline: none;
+}
+
+.linea .descartado .palito {
+	background: var(--linea);
+}
+
+.linea .descartado .anio {
+	color: var(--gris);
+	text-decoration: line-through;
+}
+
+.linea .correcto .palito {
+	height: 40px;
+	background: var(--naranja);
+}
+
+.linea .correcto .anio {
+	background: var(--naranja);
+	color: #fff;
+}
+
+@media (max-width: 520px) {
+	.linea .anio {
+		font-size: 0.95rem;
+		padding: 0.35rem 0.5rem;
+	}
+}

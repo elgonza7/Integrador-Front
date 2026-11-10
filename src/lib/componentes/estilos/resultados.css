@@ -1,0 +1,101 @@
+.resultados {
+	width: 100%;
+	max-width: 480px;
+	margin: 1rem auto 3rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.resultados .etiqueta {
+	margin: 0;
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--gris);
+}
+
+.resultados .total {
+	margin: 0.25rem 0 0;
+	font-size: 4.5rem;
+	font-weight: 800;
+	color: var(--naranja);
+	line-height: 1;
+	letter-spacing: -0.03em;
+}
+
+.resultados .total span {
+	font-size: 1.2rem;
+	margin-left: 0.3rem;
+	letter-spacing: 0;
+}
+
+.resultados .resumen {
+	margin: 0.5rem 0 1.5rem;
+	color: var(--gris);
+}
+
+.resultados .lista {
+	margin-bottom: 1.5rem;
+	width: 100%;
+	text-align: left;
+}
+
+.resultados .lista li {
+	grid-template-columns: 36px 1fr auto 3.5rem;
+	padding: 0.55rem 0;
+}
+
+.resultados .lista img,
+.resultados .mini {
+	width: 36px;
+	height: 48px;
+	border-radius: 6px;
+	object-fit: cover;
+	background: var(--naranja-claro);
+	display: block;
+}
+
+.resultados .anio {
+	color: var(--gris);
+	font-variant-numeric: tabular-nums;
+}
+
+.resultados form {
+	width: 100%;
+	text-align: left;
+	margin-bottom: 1.25rem;
+}
+
+.resultados label {
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--gris);
+}
+
+.resultados .fila {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 0.4rem;
+}
+
+.resultados input {
+	flex: 1;
+	min-width: 0;
+	font: inherit;
+	padding: 0.65rem 1rem;
+	border: 1.5px solid var(--linea);
+	border-radius: 999px;
+	outline: none;
+}
+
+.resultados input:focus {
+	border-color: var(--naranja);
+}
+
+.resultados .guardado {
+	color: var(--gris);
+	margin: 0 0 1.25rem;
+}

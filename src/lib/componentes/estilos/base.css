@@ -1,0 +1,50 @@
+:root {
+	--naranja: #ff6b00;
+	--naranja-oscuro: #e05a00;
+	--naranja-claro: #fff1e6;
+	--rojo: #9b1c1c;
+	--texto: #1d1d1f;
+	--gris: #8a8a8e;
+	--linea: #e8e8ea;
+	--fondo: #ffffff;
+	--radio: 14px;
+	--sombra: 0 10px 30px rgba(29, 29, 31, 0.08);
+	color-scheme: light;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	background: var(--fondo);
+	color: var(--texto);
+	font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+button {
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+}
+
+button:disabled {
+	cursor: default;
+}
+
+:focus-visible {
+	outline: 3px solid var(--naranja);
+	outline-offset: 2px;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}

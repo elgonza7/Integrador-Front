@@ -1,0 +1,29 @@
+.modal {
+	border: 0;
+	padding: 0;
+	border-radius: 20px;
+	width: min(460px, calc(100vw - 32px));
+	box-shadow: 0 24px 60px rgba(29, 29, 31, 0.2);
+	color: var(--texto);
+}
+
+.modal::backdrop {
+	background: rgba(29, 29, 31, 0.35);
+	backdrop-filter: blur(2px);
+}
+
+.modal .contenido {
+	padding: 1.5rem;
+}
+
+.modal .encabezado {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1rem;
+}
+
+.modal .encabezado h2 {
+	margin: 0;
+	font-size: 1.2rem;
+}

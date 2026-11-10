@@ -1,0 +1,64 @@
+<script>
+	import './estilos/resultados.css';
+	import { fade } from 'svelte/transition';
+	import { leer } from '#lib/storage.js';
+
+	/**
+	 * @type {{
+	 *   sesion: import('#lib/juego.svelte.js').Sesion,
+	 *   puntos: number,
+	 *   onGuardar: (nombre: string) => void,
+	 *   onNuevaPartida: () => void,
+	 *   onVerRanking: () => void
+	 * }}
+	 */
+	let { sesion, puntos, onGuardar, onNuevaPartida, onVerRanking } = $props();
+
+	let nombre = $state(leer('ultimoNombre', ''));
+	const aciertos = $derived(sesion.rondas.filter((r) => r.estado === 'acertado').length);
+
+	/** @param {SubmitEvent} e */
+	function enviar(e) {
+		e.preventDefault();
+		onGuardar(nombre);
+	}
+</script>
+
+<section class="resultados" in:fade={{ duration: 250 }}>
+	<p class="etiqueta">Partida terminada{sesion.hardcore ? ' · Hardcore' : ''}</p>
+	<p class="total">{puntos}<span>pts</span></p>
+	<p class="resumen">Acertaste {aciertos} de {sesion.rondas.length} juegos</p>
+
+	<ul class="lista lista-filas">
+		{#each sesion.rondas as ronda (ronda.juego.id)}
+			<li>
+				{#if ronda.juego.imagen}
+					<img src={ronda.juego.imagen} alt="" loading="lazy" />
+				{:else}
+					<span class="mini"></span>
+				{/if}
+				<span class="nombre">{ronda.juego.nombre}</span>
+				<span class="anio">{ronda.juego.anio}</span>
+				<span class="pts" class:fallado={ronda.estado === 'fallado'}>
+					{ronda.estado === 'acertado' ? `+${ronda.puntos}` : '0'}
+				</span>
+			</li>
+		{/each}
+	</ul>
+
+	{#if sesion.guardada}
+		<p class="guardado">
+			Puntaje guardado. <button class="btn-link" onclick={onVerRanking}>Ver leaderboard</button>
+		</p>
+	{:else}
+		<form onsubmit={enviar}>
+			<label for="nombre">Tu nombre para el ranking</label>
+			<div class="fila">
+				<input id="nombre" bind:value={nombre} maxlength="20" placeholder="Ej: Gokin" required autocomplete="nickname" />
+				<button class="btn-secundario" type="submit">Guardar</button>
+			</div>
+		</form>
+	{/if}
+
+	<button class="btn-primario" onclick={onNuevaPartida}>Nueva partida</button>
+</section>

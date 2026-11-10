@@ -1,0 +1,62 @@
+.cabecera {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1.25rem 0;
+}
+
+.cabecera .logo {
+	margin: 0;
+	font-size: 1.35rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	white-space: nowrap;
+}
+
+.cabecera .logo span {
+	color: var(--naranja);
+}
+
+.cabecera .acciones {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+}
+
+.cabecera .badge {
+	background: var(--texto);
+	color: #fff;
+	font-size: 0.7rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	padding: 0.3rem 0.6rem;
+	border-radius: 999px;
+}
+
+.cabecera .puntos {
+	font-weight: 600;
+	color: var(--naranja);
+	font-variant-numeric: tabular-nums;
+	padding: 0 0.4rem;
+	white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+	.cabecera {
+		gap: 0.5rem;
+	}
+	.cabecera .acciones {
+		gap: 0.2rem;
+	}
+	.cabecera .logo {
+		font-size: 1.1rem;
+	}
+	.cabecera .badge {
+		display: none;
+	}
+	.cabecera .btn-texto {
+		font-size: 0.75rem;
+	}
+}

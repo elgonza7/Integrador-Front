@@ -76,7 +76,6 @@ src/
 │   ├── +page.svelte            # pantalla principal del juego
 │   └── api/juegos/+server.js   # endpoint que consulta IGDB
 └── lib/
-    ├── index.js
     ├── juego/
     │   ├── juego.svelte.js     # estado y reglas del juego
     │   └── constants.js        # rango de años, intentos, puntos, costo de pistas

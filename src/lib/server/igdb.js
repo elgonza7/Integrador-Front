@@ -1,5 +1,5 @@
 import { IGDB_CLIENT_ID, IGDB_CLIENT_SECRET } from '$app/env/private';
-import { ANIO_MIN, ANIO_MAX } from '#lib/constants.js';
+import { AÑO_MIN, AÑO_MAX } from '#lib/constants.js';
 
 /** @typedef {import('#lib/api.js').Juego} Juego */
 /** @typedef {{ id: number, name?: string, first_release_date?: number, cover?: { image_id?: string } }} JuegoIgdb */
@@ -36,8 +36,8 @@ async function obtenerToken() {
 }
 
 function consulta() {
-	const desde = Date.UTC(ANIO_MIN, 0, 1) / 1000;
-	const hasta = Math.min(Date.now(), Date.UTC(ANIO_MAX + 1, 0, 1)) / 1000;
+	const desde = Date.UTC(AÑO_MIN, 0, 1) / 1000;
+	const hasta = Math.min(Date.now(), Date.UTC(AÑO_MAX + 1, 0, 1)) / 1000;
 	// los 500 juegos mas votados desde el 2000 hasta hoy, sin remasters ni dlcs
 	return `
 		fields name, first_release_date, cover.image_id;
@@ -80,10 +80,10 @@ async function pedirJuegos(reintentar = true) {
 function normalizar(juego) {
 	const imageId = juego.cover?.image_id;
 	if (!juego.name || !juego.first_release_date || !imageId) return null;
-	// la fecha viene en segundos y en UTC, con la hora de aca el 1 de enero quedaria en el anio anterior
-	const anio = new Date(juego.first_release_date * 1000).getUTCFullYear();
-	if (anio < ANIO_MIN || anio > ANIO_MAX) return null;
-	return { id: juego.id, nombre: juego.name, imagen: `${URL_IMAGEN}/${imageId}.jpg`, anio };
+	// la fecha viene en segundos y en UTC, con la hora de aca el 1 de enero quedaria en el año anterior
+	const año = new Date(juego.first_release_date * 1000).getUTCFullYear();
+	if (año < AÑO_MIN || año > AÑO_MAX) return null;
+	return { id: juego.id, nombre: juego.name, imagen: `${URL_IMAGEN}/${imageId}.jpg`, año };
 }
 
 export async function juegosIgdb() {

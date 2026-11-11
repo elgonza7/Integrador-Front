@@ -36,7 +36,7 @@
 	transition: height 0.15s, background 0.15s;
 }
 
-.linea .anio {
+.linea .año {
 	font-size: 1.1rem;
 	font-weight: 600;
 	font-variant-numeric: tabular-nums;
@@ -51,8 +51,8 @@
 	background: var(--naranja);
 }
 
-.linea .marca:not(:disabled):hover .anio,
-.linea .marca:not(:disabled):focus-visible .anio {
+.linea .marca:not(:disabled):hover .año,
+.linea .marca:not(:disabled):focus-visible .año {
 	background: var(--naranja-claro);
 	color: var(--naranja);
 }
@@ -65,7 +65,7 @@
 	background: var(--linea);
 }
 
-.linea .descartado .anio {
+.linea .descartado .año {
 	color: var(--gris);
 	text-decoration: line-through;
 }
@@ -75,13 +75,13 @@
 	background: var(--naranja);
 }
 
-.linea .correcto .anio {
+.linea .correcto .año {
 	background: var(--naranja);
 	color: #fff;
 }
 
 @media (max-width: 520px) {
-	.linea .anio {
+	.linea .año {
 		font-size: 0.95rem;
 		padding: 0.35rem 0.5rem;
 	}

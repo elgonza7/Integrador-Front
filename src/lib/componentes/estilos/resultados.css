@@ -58,7 +58,7 @@
 	display: block;
 }
 
-.resultados .anio {
+.resultados .año {
 	color: var(--gris);
 	font-variant-numeric: tabular-nums;
 }

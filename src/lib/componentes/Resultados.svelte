@@ -40,7 +40,7 @@
 					<span class="mini"></span>
 				{/if}
 				<span class="nombre">{ronda.juego.nombre}</span>
-				<span class="anio">{ronda.juego.anio}</span>
+				<span class="año">{ronda.juego.año}</span>
 				<span class="pts" class:fallado={ronda.puntos <= 0}>
 					{ronda.puntos > 0 ? `+${ronda.puntos}` : ronda.puntos}
 				</span>

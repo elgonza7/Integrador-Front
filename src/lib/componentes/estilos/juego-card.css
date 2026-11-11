@@ -42,7 +42,7 @@
 	background: linear-gradient(135deg, var(--naranja-claro), var(--superficie));
 }
 
-.juego-card .anio {
+.juego-card .año {
 	position: absolute;
 	right: 0.75rem;
 	bottom: 0.75rem;

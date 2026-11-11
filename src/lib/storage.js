@@ -1,5 +1,5 @@
 // todo lo que guarda el juego en localStorage arranca con este prefijo
-const PREFIJO = 'trivia-anios:';
+const PREFIJO = 'trivia-años:';
 
 /**
  * @template T

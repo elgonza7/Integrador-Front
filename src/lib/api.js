@@ -2,11 +2,11 @@ import { leer, guardar } from './storage.js';
 import { CACHE_TTL_MS, JUEGOS_POR_SESION } from './constants.js';
 import { JUEGOS } from './games.js';
 
-/** @typedef {{ id: number | string, nombre: string, imagen: string | null, anio: number }} Juego */
+/** @typedef {{ id: number | string, nombre: string, imagen: string | null, año: number }} Juego */
 /** @typedef {'api' | 'cache' | 'respaldo'} Origen */
 
 /** @type {Juego[]} */
-const JUEGOS_RESPALDO = JUEGOS.map(([nombre, anio], i) => ({ id: `local-${i}`, nombre: String(nombre), imagen: null, anio: Number(anio) }));
+const JUEGOS_RESPALDO = JUEGOS.map(([nombre, año], i) => ({ id: `local-${i}`, nombre: String(nombre), imagen: null, año: Number(año) }));
 
 /** @returns {Promise<{ juegos: Juego[], origen: Origen }>} */
 export async function obtenerJuegos() {

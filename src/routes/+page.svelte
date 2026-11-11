@@ -76,7 +76,7 @@
 						{/if}
 					{:else}
 						<p class="veredicto" class:ok={ronda.estado === 'acertado'}>
-							{ronda.estado === 'acertado' ? `¡Correcto! +${ronda.puntos} pts` : `Era ${ronda.juego.anio}`}
+							{ronda.estado === 'acertado' ? `¡Correcto! +${ronda.puntos} pts` : `Era ${ronda.juego.año}`}
 						</p>
 						<button class="btn-primario" onclick={() => juego.siguiente()}>
 							{esUltima ? 'Ver resultados' : 'Siguiente juego →'}
@@ -90,7 +90,7 @@
 			</aside>
 		</main>
 
-		<LineaTemporal {ronda} onElegir={(anio) => juego.elegir(anio)} />
+		<LineaTemporal {ronda} onElegir={(año) => juego.elegir(año)} />
 	{/if}
 </div>
 

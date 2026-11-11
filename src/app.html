@@ -7,7 +7,7 @@
 		<script>
 			// pongo el tema antes de que se dibuje la pagina, asi no parpadea en blanco
 			try {
-				var tema = JSON.parse(localStorage.getItem('trivia-anios:tema'));
+				var tema = JSON.parse(localStorage.getItem('trivia-años:tema'));
 				if (tema !== 'oscuro' && tema !== 'claro') {
 					tema = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
 				}

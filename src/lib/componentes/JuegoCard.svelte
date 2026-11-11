@@ -27,7 +27,7 @@
 		{/if}
 
 		{#if revelado}
-			<span class="anio" in:fade={{ duration: 200 }}>{juego.anio}</span>
+			<span class="año" in:fade={{ duration: 200 }}>{juego.año}</span>
 		{/if}
 	</div>
 </figure>

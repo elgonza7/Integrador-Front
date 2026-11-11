@@ -3,9 +3,9 @@ import { obtenerJuegos } from './api.js';
 import { guardarPuntaje } from './ranking.js';
 import { pistas } from './ayudas.js';
 import {
-	ANIO_MIN,
-	ANIO_MAX,
-	ANIOS_EN_LINEA,
+	AÑO_MIN,
+	AÑO_MAX,
+	AÑOS_EN_LINEA,
 	JUEGOS_POR_SESION,
 	INTENTOS_NORMAL,
 	INTENTOS_HARDCORE,
@@ -35,15 +35,15 @@ function mezclar(lista) {
 	return copia;
 }
 
-// arma los 5 anios de la linea, el real queda en cualquier posicion
+// arma los 5 años de la linea, el real queda en cualquier posicion
 /**
- * @param {number} anio
+ * @param {number} año
  */
-export function generarLinea(anio) {
-	const desde = Math.max(ANIO_MIN, anio - ANIOS_EN_LINEA + 1);
-	const hasta = Math.min(anio, ANIO_MAX - ANIOS_EN_LINEA + 1);
+export function generarLinea(año) {
+	const desde = Math.max(AÑO_MIN, año - AÑOS_EN_LINEA + 1);
+	const hasta = Math.min(año, AÑO_MAX - AÑOS_EN_LINEA + 1);
 	const inicio = desde + Math.floor(Math.random() * (hasta - desde + 1));
-	return Array.from({ length: ANIOS_EN_LINEA }, (_, i) => inicio + i);
+	return Array.from({ length: AÑOS_EN_LINEA }, (_, i) => inicio + i);
 }
 
 /** @param {unknown} valor @returns {valor is Sesion} */
@@ -87,7 +87,7 @@ class EstadoJuego {
 
 	// en hardcore no hay pistas
 	hayPistas = $derived(
-		!!this.sesion && !this.sesion.hardcore && this.ronda?.estado === 'jugando' && !!pistas[this.ronda.juego.anio]
+		!!this.sesion && !this.sesion.hardcore && this.ronda?.estado === 'jugando' && !!pistas[this.ronda.juego.año]
 	);
 
 	// cada intento tiene su pista: intento 1 la capciosa, intento 2 la media, intento 3 la regalada
@@ -99,7 +99,7 @@ class EstadoJuego {
 		const compradas = ronda?.pistasCompradas ?? [];
 		if (!this.hayPistas || !ronda || compradas.length === 0) return null;
 		const nivel = NIVELES_PISTA[Math.max(...compradas)];
-		return { titulo: nivel.titulo, texto: pistas[ronda.juego.anio][nivel.clave] };
+		return { titulo: nivel.titulo, texto: pistas[ronda.juego.año][nivel.clave] };
 	});
 
 	// lo que cuesta la pista de este intento, o null si ya la compro
@@ -138,15 +138,15 @@ class EstadoJuego {
 		this.#persistir();
 	}
 
-	/** @param {number} anio */
-	elegir(anio) {
+	/** @param {number} año */
+	elegir(año) {
 		const sesion = this.sesion;
 		const ronda = this.ronda;
-		if (!sesion || !ronda || ronda.estado !== 'jugando' || ronda.intentos.includes(anio)) return;
+		if (!sesion || !ronda || ronda.estado !== 'jugando' || ronda.intentos.includes(año)) return;
 
 		// si acierta suma segun el intento, si se queda sin intentos pierde la ronda
-		ronda.intentos.push(anio);
-		if (anio === ronda.juego.anio) {
+		ronda.intentos.push(año);
+		if (año === ronda.juego.año) {
 			const base = PUNTOS_POR_INTENTO[ronda.intentos.length - 1];
 			// += porque ya pueden estar restadas las pistas que pidio
 			ronda.puntos += base * (sesion.hardcore ? MULTIPLICADOR_HARDCORE : 1);
@@ -224,7 +224,7 @@ class EstadoJuego {
 			guardada: false,
 			rondas: elegidos.map((juego) => ({
 				juego,
-				linea: generarLinea(juego.anio),
+				linea: generarLinea(juego.año),
 				intentos: [],
 				estado: /** @type {EstadoRonda} */ ('jugando'),
 				puntos: 0,

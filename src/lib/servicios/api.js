@@ -25,7 +25,7 @@ export async function obtenerJuegos() {
 
 		/** @type {{ juegos: Juego[] }} */
 		const { juegos } = await respuesta.json();
-		if (juegos.length < JUEGOS_POR_SESION) throw new Error('La API devolvió muy pocos juegos');
+		if (juegos.length < JUEGOS_POR_SESION) throw new Error('La API devolvio muy pocos juegos');
 
 		guardar('cacheJuegos', { timestamp: Date.now(), juegos });
 		return { juegos, origen: 'api' };

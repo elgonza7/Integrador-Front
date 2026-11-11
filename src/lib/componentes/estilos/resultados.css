@@ -48,16 +48,6 @@
 	padding: 0.55rem 0;
 }
 
-.resultados .lista img,
-.resultados .mini {
-	width: 36px;
-	height: 48px;
-	border-radius: 6px;
-	object-fit: cover;
-	background: var(--naranja-claro);
-	display: block;
-}
-
 .resultados .año {
 	color: var(--gris);
 	font-variant-numeric: tabular-nums;

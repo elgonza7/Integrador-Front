@@ -2,7 +2,7 @@
 	import '#lib/componentes/estilos/pagina.css';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { juego } from '#lib/juego.svelte.js';
+	import { juego } from '#lib/juego/juego.svelte.js';
 	import Header from '#lib/componentes/Header.svelte';
 	import JuegoCard from '#lib/componentes/JuegoCard.svelte';
 	import Semaforo from '#lib/componentes/Semaforo.svelte';

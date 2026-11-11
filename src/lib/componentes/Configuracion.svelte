@@ -1,6 +1,7 @@
 <script>
 	import './estilos/configuracion.css';
-	import { tema } from '#lib/tema.svelte.js';
+	import { tema } from '#lib/utilidades/tema.svelte.js';
+	import Switch from './base/Switch.svelte';
 	/**
 	 * @type {{
 	 *   hardcore: boolean,
@@ -18,38 +19,14 @@
 </script>
 
 <div class="configuracion">
-	<div class="opcion">
-		<div>
-			<h3 id="titulo-hardcore">Modo Hardcore</h3>
-			<p>Un solo intento por juego. Cada acierto vale el doble.</p>
-		</div>
-		<button
-			class="switch"
-			class:on={hardcore}
-			role="switch"
-			aria-checked={hardcore}
-			aria-labelledby="titulo-hardcore"
-			onclick={() => onCambiar(!hardcore)}
-		>
-			<span></span>
-		</button>
-	</div>
+	<Switch
+		titulo="Modo Hardcore"
+		descripcion="Un solo intento por juego. Cada acierto vale el doble."
+		activo={hardcore}
+		onCambiar={() => onCambiar(!hardcore)}
+	/>
 
-	<div class="opcion">
-		<div>
-			<h3 id="titulo-oscuro">Modo oscuro</h3>
-		</div>
-		<button
-			class="switch"
-			class:on={tema.oscuro}
-			role="switch"
-			aria-checked={tema.oscuro}
-			aria-labelledby="titulo-oscuro"
-			onclick={() => tema.alternar()}
-		>
-			<span></span>
-		</button>
-	</div>
+	<Switch titulo="Modo oscuro" activo={tema.oscuro} onCambiar={() => tema.alternar()} />
 
 	{#if cambioPendiente}
 		<div class="aviso">

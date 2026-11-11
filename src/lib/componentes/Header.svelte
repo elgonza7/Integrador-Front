@@ -1,6 +1,6 @@
 <script>
 	import './estilos/header.css';
-	import { tema } from '#lib/tema.svelte.js';
+	import { tema } from '#lib/utilidades/tema.svelte.js';
 	/** @type {{ puntos: number, hardcore: boolean, onRanking: () => void, onConfig: () => void }} */
 	let { puntos, hardcore, onRanking, onConfig } = $props();
 </script>

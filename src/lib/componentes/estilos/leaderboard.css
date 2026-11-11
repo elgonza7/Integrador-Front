@@ -30,17 +30,6 @@
 	margin: 0;
 }
 
-.leaderboard .tabla li {
-	grid-template-columns: 2.5rem 1fr auto;
-	padding: 0.65rem 0.5rem;
-}
-
-.leaderboard .tabla li.yo {
-	background: var(--naranja-claro);
-	border-radius: 10px;
-	border-bottom-color: transparent;
-}
-
 .leaderboard .tabla li.separador {
 	display: block;
 	text-align: center;
@@ -48,18 +37,4 @@
 	letter-spacing: 0.3em;
 	padding: 0.2rem 0;
 	border-bottom: 0;
-}
-
-.leaderboard .pos {
-	font-weight: 800;
-	color: var(--gris);
-	text-align: center;
-}
-
-.leaderboard .podio .pos {
-	color: var(--naranja);
-}
-
-.leaderboard .pts {
-	min-width: 3ch;
 }

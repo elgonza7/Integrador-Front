@@ -1,0 +1,24 @@
+.lista-filas li.fila-ranking {
+	grid-template-columns: 2.5rem 1fr auto;
+	padding: 0.65rem 0.5rem;
+}
+
+.fila-ranking.yo {
+	background: var(--naranja-claro);
+	border-radius: 10px;
+	border-bottom-color: transparent;
+}
+
+.fila-ranking .pos {
+	font-weight: 800;
+	color: var(--gris);
+	text-align: center;
+}
+
+.fila-ranking.podio .pos {
+	color: var(--naranja);
+}
+
+.fila-ranking .pts {
+	min-width: 3ch;
+}

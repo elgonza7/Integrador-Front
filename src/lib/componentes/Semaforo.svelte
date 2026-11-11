@@ -1,6 +1,6 @@
 <script>
 	import './estilos/semaforo.css';
-	/** @typedef {import('#lib/juego.svelte.js').Ronda} Ronda */
+	/** @typedef {import('#lib/juego/juego.svelte.js').Ronda} Ronda */
 
 	/** @type {{ rondas: Ronda[], actual: number }} */
 	let { rondas, actual } = $props();

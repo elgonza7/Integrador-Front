@@ -1,13 +1,14 @@
 <script>
 	import './estilos/resultados.css';
 	import { fade } from 'svelte/transition';
-	import { leer } from '#lib/storage.js';
+	import { leerNombre } from '#lib/utilidades/storage.js';
+	import Portada from './base/Portada.svelte';
 
 	/**
 	 * @type {{
-	 *   sesion: import('#lib/juego.svelte.js').Sesion,
+	 *   sesion: import('#lib/juego/juego.svelte.js').Sesion,
 	 *   puntos: number,
-	 *   estadoGuardado: import('#lib/juego.svelte.js').EstadoGuardado,
+	 *   estadoGuardado: import('#lib/juego/juego.svelte.js').EstadoGuardado,
 	 *   mejorPuntaje: number | null,
 	 *   onGuardar: (nombre: string) => void,
 	 *   onNuevaPartida: () => void,
@@ -16,7 +17,7 @@
 	 */
 	let { sesion, puntos, estadoGuardado, mejorPuntaje, onGuardar, onNuevaPartida, onVerRanking } = $props();
 
-	let nombre = $state(leer('ultimoNombre', ''));
+	let nombre = $state(leerNombre());
 	const aciertos = $derived(sesion.rondas.filter((r) => r.estado === 'acertado').length);
 
 	/** @param {SubmitEvent} e */
@@ -34,11 +35,7 @@
 	<ul class="lista lista-filas">
 		{#each sesion.rondas as ronda (ronda.juego.id)}
 			<li>
-				{#if ronda.juego.imagen}
-					<img src={ronda.juego.imagen} alt="" loading="lazy" />
-				{:else}
-					<span class="mini"></span>
-				{/if}
+				<Portada juego={ronda.juego} mini />
 				<span class="nombre">{ronda.juego.nombre}</span>
 				<span class="año">{ronda.juego.año}</span>
 				<span class="pts" class:fallado={ronda.puntos <= 0}>

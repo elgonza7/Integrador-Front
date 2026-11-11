@@ -1,6 +1,6 @@
-import { leer, guardar } from './storage.js';
-import { CACHE_TTL_MS, JUEGOS_POR_SESION } from './constants.js';
-import { JUEGOS } from './games.js';
+import { leer, guardar } from '#lib/utilidades/storage.js';
+import { CACHE_TTL_MS, JUEGOS_POR_SESION } from '#lib/juego/constants.js';
+import { JUEGOS } from '#lib/datos/games.js';
 
 /** @typedef {{ id: number | string, nombre: string, imagen: string | null, año: number }} Juego */
 /** @typedef {'api' | 'cache' | 'respaldo'} Origen */

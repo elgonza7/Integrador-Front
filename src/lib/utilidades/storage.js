@@ -33,3 +33,9 @@ export function borrarTodo() {
 			.forEach((k) => localStorage.removeItem(k));
 	} catch {}
 }
+
+// el nombre que puso la ultima vez, lo usan resultados y el leaderboard
+export const leerNombre = () => leer('ultimoNombre', '');
+
+/** @param {string} nombre */
+export const guardarNombre = (nombre) => guardar('ultimoNombre', nombre);

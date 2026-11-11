@@ -1,7 +1,7 @@
 import { IGDB_CLIENT_ID, IGDB_CLIENT_SECRET } from '$app/env/private';
-import { AÑO_MIN, AÑO_MAX } from '#lib/constants.js';
+import { AÑO_MIN, AÑO_MAX } from '#lib/juego/constants.js';
 
-/** @typedef {import('#lib/api.js').Juego} Juego */
+/** @typedef {import('#lib/servicios/api.js').Juego} Juego */
 /** @typedef {{ id: number, name?: string, first_release_date?: number, cover?: { image_id?: string } }} JuegoIgdb */
 
 const URL_TOKEN = 'https://id.twitch.tv/oauth2/token';
@@ -60,8 +60,6 @@ async function pedirJuegos(reintentar = true) {
 		},
 		body: consulta()
 	});
-
-	// si el token se vencio pido uno nuevo y pruebo una vez mas
 	if (respuesta.status === 401 && reintentar) {
 		token = null;
 		return pedirJuegos(false);

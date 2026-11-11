@@ -1,6 +1,6 @@
 <script>
 	import './estilos/linea-temporal.css';
-	/** @type {{ ronda: import('#lib/juego.svelte.js').Ronda, onElegir: (año: number) => void }} */
+	/** @type {{ ronda: import('#lib/juego/juego.svelte.js').Ronda, onElegir: (año: number) => void }} */
 	let { ronda, onElegir } = $props();
 
 	const resuelta = $derived(ronda.estado !== 'jugando');

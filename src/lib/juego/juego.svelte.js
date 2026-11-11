@@ -1,7 +1,7 @@
-import { leer, guardar, borrarTodo } from './storage.js';
-import { obtenerJuegos } from './api.js';
-import { guardarPuntaje } from './ranking.js';
-import { pistas } from './ayudas.js';
+import { leer, guardar, borrarTodo, guardarNombre } from '#lib/utilidades/storage.js';
+import { obtenerJuegos } from '#lib/servicios/api.js';
+import { guardarPuntaje } from '#lib/servicios/ranking.js';
+import { pistas } from '#lib/datos/ayudas.js';
 import {
 	AÑO_MIN,
 	AÑO_MAX,
@@ -12,10 +12,10 @@ import {
 	PUNTOS_POR_INTENTO,
 	MULTIPLICADOR_HARDCORE,
 	COSTOS_PISTA
-} from './constants.js';
+} from '#lib/juego/constants.js';
 
-/** @typedef {import('./api.js').Juego} Juego */
-/** @typedef {import('./api.js').Origen} Origen */
+/** @typedef {import('#lib/servicios/api.js').Juego} Juego */
+/** @typedef {import('#lib/servicios/api.js').Origen} Origen */
 /** @typedef {'jugando' | 'acertado' | 'fallado'} EstadoRonda */
 /** @typedef {{ juego: Juego, linea: number[], intentos: number[], estado: EstadoRonda, puntos: number, pistasCompradas?: number[] }} Ronda */
 /** @typedef {{ hardcore: boolean, rondas: Ronda[], actual: number, guardada: boolean }} Sesion */
@@ -184,7 +184,7 @@ class EstadoJuego {
 			this.mejorPuntaje = await guardarPuntaje(limpio, Math.max(0, this.puntosTotales), sesion.hardcore);
 			sesion.guardada = true;
 			this.estadoGuardado = 'nada';
-			guardar('ultimoNombre', limpio);
+			guardarNombre(limpio);
 			this.#persistir();
 		} catch (error) {
 			console.error('No se pudo guardar en Firebase:', error);

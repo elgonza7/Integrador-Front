@@ -1,1 +1,1 @@
-export { pistas } from './ayudas';
+export { pistas } from '#lib/datos/ayudas.js';

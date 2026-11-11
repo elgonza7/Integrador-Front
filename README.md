@@ -23,7 +23,7 @@ Juego de trivia hecho con **Svelte 5 + SvelteKit**: aparece la tapa y el título
 | Nombre del jugador y puntaje | Formulario al terminar la partida | [Cloud Firestore](https://firebase.google.com/docs/firestore) (Leaderboard online) |
 | Partida en curso y configuración | El propio juego | `localStorage`: si recargás la página, seguís donde estabas |
 
-Si IGDB no responde o no hay credenciales, el juego sigue funcionando con una lista de juegos de respaldo (`src/lib/games.js`).
+Si IGDB no responde o no hay credenciales, el juego sigue funcionando con una lista de juegos de respaldo (`src/lib/datos/games.js`).
 
 ## Tecnologías
 
@@ -76,16 +76,23 @@ src/
 │   ├── +page.svelte            # pantalla principal del juego
 │   └── api/juegos/+server.js   # endpoint que consulta IGDB
 └── lib/
-    ├── api.js                  # pide los juegos al endpoint (con caché y respaldo)
-    ├── juego.svelte.js         # estado y reglas del juego
-    ├── storage.js              # lectura/escritura segura de localStorage
-    ├── ranking.js              # leaderboard en Firestore (guardar y leer)
-    ├── constants.js            # rango de años, intentos, puntos
-    ├── games.js                # juegos de respaldo
-    ├── ayudas.js               # pistas por año
+    ├── index.js
+    ├── juego/
+    │   ├── juego.svelte.js     # estado y reglas del juego
+    │   └── constants.js        # rango de años, intentos, puntos, costo de pistas
+    ├── servicios/
+    │   ├── api.js              # pide los juegos al endpoint (con caché y respaldo)
+    │   └── ranking.js          # leaderboard en Firestore (guardar y leer)
+    ├── datos/
+    │   ├── games.js            # juegos de respaldo
+    │   └── ayudas.js           # pistas por año
+    ├── utilidades/
+    │   ├── storage.js          # lectura/escritura segura de localStorage
+    │   └── tema.svelte.js      # modo claro / oscuro
     ├── server/igdb.js          # token de Twitch + consulta a IGDB (solo servidor)
     └── componentes/
         ├── *.svelte            # Header, JuegoCard, LineaTemporal, Semaforo, Modal...
+        ├── base/               # Portada, FilaRanking, Switch (los usan varios componentes)
         └── estilos/            # un .css por componente + base, botones y comunes
 ```
 

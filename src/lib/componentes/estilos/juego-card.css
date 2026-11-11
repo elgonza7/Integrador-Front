@@ -14,34 +14,6 @@
 	line-height: 1.3;
 }
 
-.juego-card .marco {
-	position: relative;
-	aspect-ratio: 3 / 4;
-	border-radius: var(--radio);
-	overflow: hidden;
-	background: var(--naranja-claro);
-	box-shadow: var(--sombra);
-}
-
-.juego-card img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-	animation: aparecer 0.4s ease;
-}
-
-.juego-card .placeholder {
-	width: 100%;
-	height: 100%;
-	display: grid;
-	place-items: center;
-	font-size: 4rem;
-	font-weight: 800;
-	color: var(--naranja);
-	background: linear-gradient(135deg, var(--naranja-claro), var(--superficie));
-}
-
 .juego-card .año {
 	position: absolute;
 	right: 0.75rem;
@@ -53,10 +25,4 @@
 	padding: 0.25rem 0.8rem;
 	border-radius: 999px;
 	box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
-}
-
-@keyframes aparecer {
-	from {
-		opacity: 0;
-	}
 }

@@ -1,7 +1,8 @@
 <script>
 	import './estilos/leaderboard.css';
-	import { obtenerRanking } from '#lib/ranking.js';
-	import { leer } from '#lib/storage.js';
+	import { obtenerRanking } from '#lib/servicios/ranking.js';
+	import { leerNombre } from '#lib/utilidades/storage.js';
+	import FilaRanking from './base/FilaRanking.svelte';
 
 	/** @type {{ hardcoreInicial: boolean }} */
 	let { hardcoreInicial } = $props();
@@ -14,7 +15,7 @@
 	/** @type {Awaited<ReturnType<typeof obtenerRanking>> | null} */
 	let datos = $state(null);
 	let error = $state(false);
-	const miNombre = leer('ultimoNombre', '');
+	const miNombre = leerNombre();
 
 	$effect(() => {
 		const modo = verHardcore;
@@ -56,20 +57,12 @@
 	{:else}
 		<ol class="tabla lista-filas">
 			{#each datos.top as fila, i (fila.id)}
-				<li class:podio={i === 0} class:yo={fila.id === datos.yo?.id}>
-					<span class="pos">{i + 1}</span>
-					<span class="nombre">{fila.nombre}</span>
-					<span class="pts">{fila.puntos}</span>
-				</li>
+				<FilaRanking posicion={i + 1} nombre={fila.nombre} puntos={fila.puntos} podio={i === 0} yo={fila.id === datos.yo?.id} />
 			{/each}
 
 			{#if datos.yo && !yoEnTop}
 				<li class="separador" aria-hidden="true">···</li>
-				<li class="yo">
-					<span class="pos">{datos.yo.posicion}</span>
-					<span class="nombre">{datos.yo.nombre}</span>
-					<span class="pts">{datos.yo.puntos}</span>
-				</li>
+				<FilaRanking posicion={datos.yo.posicion} nombre={datos.yo.nombre} puntos={datos.yo.puntos} yo />
 			{/if}
 		</ol>
 	{/if}

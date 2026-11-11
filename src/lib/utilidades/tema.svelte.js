@@ -1,4 +1,4 @@
-import { guardar } from './storage.js';
+import { guardar } from '#lib/utilidades/storage.js';
 
 /** @typedef {'claro' | 'oscuro'} Tema */
 

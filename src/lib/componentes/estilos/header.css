@@ -26,7 +26,7 @@
 
 .cabecera .badge {
 	background: var(--texto);
-	color: #fff;
+	color: var(--fondo);
 	font-size: 0.7rem;
 	font-weight: 600;
 	letter-spacing: 0.08em;

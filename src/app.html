@@ -1,9 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<script>
+			// pongo el tema antes de que se dibuje la pagina, asi no parpadea en blanco
+			try {
+				var tema = JSON.parse(localStorage.getItem('trivia-anios:tema'));
+				if (tema !== 'oscuro' && tema !== 'claro') {
+					tema = matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+				}
+				document.documentElement.dataset.tema = tema;
+			} catch (e) {
+				document.documentElement.dataset.tema = 'claro';
+			}
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

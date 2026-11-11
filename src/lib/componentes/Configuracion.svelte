@@ -1,5 +1,6 @@
 <script>
 	import './estilos/configuracion.css';
+	import { tema } from '#lib/tema.svelte.js';
 	/**
 	 * @type {{
 	 *   hardcore: boolean,
@@ -29,6 +30,22 @@
 			aria-checked={hardcore}
 			aria-labelledby="titulo-hardcore"
 			onclick={() => onCambiar(!hardcore)}
+		>
+			<span></span>
+		</button>
+	</div>
+
+	<div class="opcion">
+		<div>
+			<h3 id="titulo-oscuro">Modo oscuro</h3>
+		</div>
+		<button
+			class="switch"
+			class:on={tema.oscuro}
+			role="switch"
+			aria-checked={tema.oscuro}
+			aria-labelledby="titulo-oscuro"
+			onclick={() => tema.alternar()}
 		>
 			<span></span>
 		</button>

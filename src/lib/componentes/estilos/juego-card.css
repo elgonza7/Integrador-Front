@@ -39,7 +39,7 @@
 	font-size: 4rem;
 	font-weight: 800;
 	color: var(--naranja);
-	background: linear-gradient(135deg, var(--naranja-claro), #fff);
+	background: linear-gradient(135deg, var(--naranja-claro), var(--superficie));
 }
 
 .juego-card .anio {

@@ -65,11 +65,15 @@
 
 .configuracion .aviso .btn-secundario {
 	padding: 0.45rem 1rem;
-	background: #fff;
+	background: var(--superficie);
 }
 
 .configuracion hr {
 	border: 0;
 	border-top: 1px solid var(--linea);
 	margin: 1.5rem 0 1rem;
+}
+
+.configuracion .opcion + .opcion {
+	margin-top: 1.25rem;
 }

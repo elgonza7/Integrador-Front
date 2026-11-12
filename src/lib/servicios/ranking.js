@@ -29,6 +29,18 @@ const db = getFirestore(initializeApp(firebaseConfig));
 
 export const TOP = 4;
 
+/** @param {string} nombre @param {number} puntos @param {boolean} hardcore */
+function validarPuntaje(nombre, puntos, hardcore) {
+	const nombreLimpio = nombre.trim();
+	const maximo = hardcore ? 800 : 400;
+	if (!nombreLimpio || nombreLimpio.length > 20) {
+		throw new RangeError('El nombre debe tener entre 1 y 20 caracteres.');
+	}
+	if (!Number.isInteger(puntos) || puntos < 0 || puntos > maximo) {
+		throw new RangeError(`El puntaje debe ser un número entero entre 0 y ${maximo}.`);
+	}
+}
+
 /** @param {boolean} hardcore */
 const coleccion = (hardcore) => collection(db, hardcore ? 'ranking_hardcore' : 'ranking_normal');
 
@@ -43,6 +55,7 @@ const idJugador = (nombre) => 'j_' + nombre.trim().toLowerCase().replaceAll('/',
  * @returns {Promise<number>}
  */
 export function guardarPuntaje(nombre, puntos, hardcore) {
+	validarPuntaje(nombre, puntos, hardcore);
 	const ref = doc(coleccion(hardcore), idJugador(nombre));
 	// solo piso el puntaje si es mejor que el que ya tenia
 	return runTransaction(db, async (t) => {
